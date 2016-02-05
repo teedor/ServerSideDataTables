@@ -16,9 +16,11 @@
             });
 
             $("#tblSkippy")
-                .on('processing.dt', function (e, settings, processing) {
-                    $('#processingIndicator').css('display', processing ? 'block' : 'none');
-                })
+
+                //// uncomment to show something while loading
+                //.on('processing.dt', function (e, settings, processing) {
+                //    $('#processingIndicator').css('display', processing ? 'block' : 'none');
+                //})
                 .DataTable({
                     "serverSide": true,
                     "ajax": "/Home/PeopleData",
