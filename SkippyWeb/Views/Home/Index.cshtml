@@ -1,0 +1,50 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+<link href="~/Content/dataTables.bootstrap.css" rel="stylesheet" />
+<link href="~/Content/jquery.dataTables.css" rel="stylesheet" />
+@section scripts
+{
+
+    <script src="~/Scripts/jquery.dataTables.js"></script>
+    <script src="~/Scripts/dataTables.bootstrap.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $.ajaxSetup({
+                cache: false
+            });
+
+            $("#tblSkippy")
+                .on('processing.dt', function (e, settings, processing) {
+                    $('#processingIndicator').css('display', processing ? 'block' : 'none');
+                })
+                .DataTable({
+                    "serverSide": true,
+                    "ajax": "/Home/PeopleData",
+                    "columns": [
+                        { "data": "Id" },
+                        { "data": "Name" },
+                        { "data": "FormattedDate" } // Have a look at the partial class
+                    ],
+                    searchDelay: 350,
+                    "processing": true,
+                    "oLanguage": {
+                        "sProcessing": "Hold on a wee bit there, horsebox"
+                    }
+                });
+
+        })
+    </script>
+}
+<div id="processingIndicator" style="display: none; height: 100px; width: 300px; background-color: yellow; color: red;">WAIT!!!!!</div>
+<table id="tblSkippy">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Date of birth</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
