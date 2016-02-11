@@ -66,7 +66,7 @@ namespace ServerSideDatatables.Controllers
                 {
                     draw = draw,
                     recordsTotal = recordsTotal,
-                    recordsFiltered = recordsTotal,
+                    recordsFiltered = recordsFiltered,
                     data = data
                 };
 
