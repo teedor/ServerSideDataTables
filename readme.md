@@ -1,6 +1,6 @@
 ﻿#JQuery datatables with server-side processing
 
-![datatables](https://raw.githubusercontent.com/stevenalexander/ServerSideDataTables/master/datatables-server-side.png)
+![datatables](https://raw.githubusercontent.com/stevenalexander/ServerSideDataTables/master/server-side-processing.gif)
 
 ## Introduction
 
