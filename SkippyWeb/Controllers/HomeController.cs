@@ -7,7 +7,7 @@ using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 
-namespace SkippyWeb.Controllers
+namespace ServerSideDatatables.Controllers
 {
     public class HomeController : Controller
     {

@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SkippyWeb
+namespace ServerSideDatatables
 {
     using System;
     using System.Collections.Generic;
