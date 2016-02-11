@@ -41,7 +41,72 @@ The magic happens in the DatatablesRepository objects which handle those calls.
 
 ### DatatablesRepository classes
 
+[Interface](https://github.com/stevenalexander/ServerSideDataTables/blob/master/SkippyWeb/Datatables/Repository/IDatatablesRepository.cs):
+
+    public interface IDatatablesRepository<TEntity>
+    {
+        Task<IEnumerable<TEntity>> GetPagedSortedFilteredListAsync(int start, int length, string orderColumnName, ListSortDirection order, string searchValue);
+        Task<int> GetRecordsTotalAsync();
+        Task<int> GetRecordsFilteredAsync(string searchValue);
+        string GetSearchPropertyName();
+    }
+
+The base class DatatablesRepository has a [default implementation](https://github.com/stevenalexander/ServerSideDataTables/blob/master/SkippyWeb/Datatables/Repository/DatatablesRepository.cs#L57) which provides generic logic for paging, searching and ordering an entity:
+
+    protected virtual IQueryable<TEntity> CreateQueryWithWhereAndOrderBy(string searchValue, string orderColumnName, ListSortDirection order)
+    {
+        ...
+        query = GetWhereQueryForSearchValue(query, searchValue);
+        query = AddOrderByToQuery(query, orderColumnName, order);
+        ...
+    }
+
+    protected virtual IQueryable<TEntity> GetWhereQueryForSearchValue(IQueryable<TEntity> queryable, string searchValue)
+    {
+        string searchPropertyName = GetSearchPropertyName();
+        if (!string.IsNullOrWhiteSpace(searchValue) && !string.IsNullOrWhiteSpace(searchPropertyName))
+        {
+            var searchValues = Regex.Split(searchValue, "\\s+");
+            foreach (string value in searchValues)
+            {
+                if (!string.IsNullOrWhiteSpace(value))
+                {
+                    queryable = queryable.Where(GetExpressionForPropertyContains(searchPropertyName, value));
+                }
+            }
+            return queryable;
+        }
+        return queryable;
+    }
+
+    protected virtual IQueryable<TEntity> AddOrderByToQuery(IQueryable<TEntity> query, string orderColumnName, ListSortDirection order)
+    {
+        var orderDirectionMethod = order == ListSortDirection.Ascending
+                ? "OrderBy"
+                : "OrderByDescending";
+
+        var type = typeof(TEntity);
+        var property = type.GetProperty(orderColumnName);
+        var parameter = Expression.Parameter(type, "p");
+        var propertyAccess = Expression.MakeMemberAccess(parameter, property);
+        var orderByExp = Expression.Lambda(propertyAccess, parameter);
+        var filteredAndOrderedQuery = Expression.Call(typeof(Queryable), orderDirectionMethod, new Type[] { type, property.PropertyType }, query.Expression, Expression.Quote(orderByExp));
+
+        return query.Provider.CreateQuery<TEntity>(filteredAndOrderedQuery);
+    }
+
+The default implementation for creating the Where query (for searching) will only work if you provide a SearchPropertyName for a property that exists in the database that is a concatenation of all the values you want to search in the format displayed.
+
+You can implement and override to use a custom method if your Entity does not support this, here is an example from the Person Entity:
+
+
+
+
+for these, but unless you provide details on how to search in an explicit Entity repository class it will be unable to search. You will also get errors if you attempt to sort on a column which does not exist in the database (i.e. a formated date or ). To 
+
 ## Notes
 
+- If you are displaying date values be aware that you will need to format the date for display before returning in JSON, and the date format will affect how you sort the column on the backend as you will need to identify the actual date column property rather than the formated string.
+- 
 - I created the initial example with the help of [Stephen Anderson](https://github.com/teedor/ServerSideDataTables)
 
