@@ -99,14 +99,52 @@ The default implementation for creating the Where query (for searching) will onl
 
 You can implement and override to use a custom method if your Entity does not support this, here is an example from the Person Entity:
 
+    public class PeopleDatatablesRepository : DatatablesRepository<Person>
+    {
+        ...
+        protected override IQueryable<Person> GetWhereQueryForSearchValue(IQueryable<Person> queryable, string searchValue)
+        {
+            return queryable.Where(x =>
+                    // id column (int)
+                    SqlFunctions.StringConvert((double)x.Id).Contains(searchValue)
+                    // name column (string)
+                    || x.Name.Contains(searchValue)
+                    // date of birth column (datetime, formatted as d/M/yyyy) - limitation of sql prevented us from getting leading zeros in day or month
+                    || (SqlFunctions.StringConvert((double)SqlFunctions.DatePart("dd", x.DateOfBirth)) + "/" + SqlFunctions.DatePart("mm", x.DateOfBirth) + "/" + SqlFunctions.DatePart("yyyy", x.DateOfBirth)).Contains(searchValue));
+        }
+    }
 
+The same is true of the order by query, which may need customisation to sort correctly for data, i.e. dates. Here is an example from the PersonDepartmentListViewRepository, which replaces the formatted date column being formatted with the raw date:
 
+    public class PersonDepartmentListViewRepository : DatatablesRepository<PersonDepartmentListView>
+    {
+        ...
+        protected override IQueryable<PersonDepartmentListView> AddOrderByToQuery(IQueryable<PersonDepartmentListView> query, string orderColumnName, ListSortDirection order)
+        {
+            if (orderColumnName == "DateOfBirthFormatted")
+            {
+                orderColumnName = "DateOfBirth";
+            }
+            return base.AddOrderByToQuery(query, orderColumnName, order);
+        }
+    }
 
-for these, but unless you provide details on how to search in an explicit Entity repository class it will be unable to search. You will also get errors if you attempt to sort on a column which does not exist in the database (i.e. a formated date or ). To 
+Using a view will make life much easier, as the data can be pre-formatted and you can supply a search column to do the full word searching, here's the view I used to combine results from two tables:
+
+    CREATE VIEW [dbo].[PersonDepartmentListView]
+    AS
+    SELECT dbo.Person.Id, 
+    dbo.Person.Name, 
+    dbo.Person.DateOfBirth,
+    CONVERT(varchar(10), CONVERT(date, dbo.Person.DateOfBirth, 106), 103) AS DateOfBirthFormatted,
+    dbo.Department.Name AS DepartmentName,
+    CONVERT(varchar(10), dbo.Person.Id) + ' ' + dbo.Person.Name + ' ' + CONVERT(varchar(10), CONVERT(date, dbo.Person.DateOfBirth, 106), 103) + ' ' + dbo.Department.Name AS SearchString
+    FROM  dbo.Person INNER JOIN
+           dbo.Department ON dbo.Person.DepartmentId = dbo.Department.Id
 
 ## Notes
 
-- If you are displaying date values be aware that you will need to format the date for display before returning in JSON, and the date format will affect how you sort the column on the backend as you will need to identify the actual date column property rather than the formated string.
-- 
+- If you are displaying date values be aware that you will need to format the date for display before returning in JSON, and the date format will affect how you sort the column on the backend as you will need to identify the actual date column property rather than the formated string
+- For effort and performance you are better off creating view than using complex Linq queries
 - I created the initial example with the help of [Stephen Anderson](https://github.com/teedor/ServerSideDataTables)
 
