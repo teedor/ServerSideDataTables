@@ -122,14 +122,21 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Datatables\Repository\DatatablesRepository.cs" />
+    <Compile Include="Datatables\Repository\PersonDepartmentListViewRepository.cs" />
     <Compile Include="Datatables\Repository\PeopleDatatablesRepository.cs" />
     <Compile Include="Datatables\Response\DatatablesResponse.cs" />
     <Compile Include="Datatables\Repository\IDatatablesRepository.cs" />
     <Compile Include="Datatables\Response\IDatatablesResponse.cs" />
+    <Compile Include="Department.cs">
+      <DependentUpon>Skippy.tt</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Person.cs">
+      <DependentUpon>Skippy.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PersonDepartmentListView.cs">
       <DependentUpon>Skippy.tt</DependentUpon>
     </Compile>
     <Compile Include="PersonPartial.cs" />

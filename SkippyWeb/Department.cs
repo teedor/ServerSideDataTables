@@ -12,13 +12,16 @@ namespace ServerSideDatatables
     using System;
     using System.Collections.Generic;
     
-    public partial class Person
+    public partial class Department
     {
+        public Department()
+        {
+            this.People = new HashSet<Person>();
+        }
+    
         public int Id { get; set; }
         public string Name { get; set; }
-        public System.DateTime DateOfBirth { get; set; }
-        public int DepartmentId { get; set; }
     
-        public virtual Department Department { get; set; }
+        public virtual ICollection<Person> People { get; set; }
     }
 }

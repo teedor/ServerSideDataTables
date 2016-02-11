@@ -15,12 +15,7 @@
                 cache: false
             });
 
-            $("#tblSkippy")
-
-                //// uncomment to show something while loading
-                //.on('processing.dt', function (e, settings, processing) {
-                //    $('#processingIndicator').css('display', processing ? 'block' : 'none');
-                //})
+            $("#tblPerson")
                 .DataTable({
                     "serverSide": true,
                     "ajax": "/Home/PeopleData",
@@ -32,16 +27,64 @@
                     searchDelay: 350
                 });
 
+            $("#tblPersonDepartmentListView")
+                .DataTable({
+                    "serverSide": true,
+                    "ajax": "/Home/PeopleListViewData",
+                    "columns": [
+                        { "data": "Id" },
+                        { "data": "Name" },
+                        { "data": "DateOfBirthFormatted" },
+                        { "data": "DepartmentName"}
+                    ],
+                    searchDelay: 350
+                });
+
         })
     </script>
 }
-<table id="tblSkippy">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Date of birth</th>
-        </tr>
-    </thead>
-    <tbody></tbody>
-</table>
+
+<hr />
+<div>
+    <h2>Datatable against PersonDepartmentListView</h2>
+    <p>
+        This datatable uses server-side processing against a generic repository, requiring only a implementation for
+        the search. As it uses a view which pre-formats the data for display, joins related data and provides a SearchString column with 
+        all display data, it can use a generic implementation with good performance for doing word search on all columns, 
+        i.e. "adam finance" will match as it searches both words "adam" and "finance" on all displayed results.
+    </p>
+
+    <table id="tblPersonDepartmentListView">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Date of birth</th>
+                <th>Department</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<hr />
+<div>
+    <h2>Datatable against Person entity</h2>
+    <p>
+        This datatable uses server-side processing against a generic repository, requiring only a implementation for 
+        the search. Ordering is done generically, but if the entity is complex or you need to display/search/sort 
+        data from multiple entities you will need a more complex implementation. Search is also full string against 
+        single fields rather than a word search against all.
+    </p>
+
+    <table id="tblPerson">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Date of birth</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>

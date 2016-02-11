@@ -6,6 +6,9 @@
     <edmx:Diagrams>
       <Diagram DiagramId="800737a397da49dbadd2c2de9a375f95" Name="Diagram1">
         <EntityTypeShape EntityType="SkippyModel.Person" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SkippyModel.Department" Width="1.5" PointX="0.75" PointY="4" />
+        <EntityTypeShape EntityType="SkippyModel.PersonDepartmentListView" Width="1.5" PointX="3.375" PointY="0.75" />
+        <AssociationConnector Association="SkippyModel.FK_Person_Department" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
