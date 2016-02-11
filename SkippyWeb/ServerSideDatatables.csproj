@@ -121,6 +121,11 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Datatables\Repository\DatatablesRepository.cs" />
+    <Compile Include="Datatables\Repository\PeopleDatatablesRepository.cs" />
+    <Compile Include="Datatables\Response\DatatablesResponse.cs" />
+    <Compile Include="Datatables\Repository\IDatatablesRepository.cs" />
+    <Compile Include="Datatables\Response\IDatatablesResponse.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
