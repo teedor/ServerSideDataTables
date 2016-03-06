@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Optimization;
 
-namespace SkippyWeb
+namespace ServerSideDatatables
 {
     public class BundleConfig
     {

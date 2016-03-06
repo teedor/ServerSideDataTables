@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SkippyWeb
+namespace ServerSideDatatables
 {
     using System;
     using System.Data.Entity;
@@ -26,5 +26,7 @@ namespace SkippyWeb
         }
     
         public virtual DbSet<Person> People { get; set; }
+        public virtual DbSet<Department> Departments { get; set; }
+        public virtual DbSet<PersonDepartmentListView> PersonDepartmentListViews { get; set; }
     }
 }

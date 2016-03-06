@@ -12,13 +12,13 @@ namespace ServerSideDatatables
     using System;
     using System.Collections.Generic;
     
-    public partial class Person
+    public partial class PersonDepartmentListView
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string DateOfBirthFormatted { get; set; }
+        public string DepartmentName { get; set; }
+        public string SearchString { get; set; }
         public System.DateTime DateOfBirth { get; set; }
-        public int DepartmentId { get; set; }
-    
-        public virtual Department Department { get; set; }
     }
 }
